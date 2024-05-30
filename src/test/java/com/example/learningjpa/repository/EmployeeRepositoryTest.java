@@ -5,6 +5,9 @@ import com.example.learningjpa.entity.Registry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -98,6 +101,37 @@ class EmployeeRepositoryTest {
                 "John",
                 "blue collar"
         );
+
+    }
+
+    @Test
+    public void findAllPagination(){
+        Pageable firstPageWith2Records =
+                PageRequest.of(0, 2);
+
+        Pageable secondPagewith1Records =
+                PageRequest.of(0, 1);
+
+        List<Employee> employees = employeeRepository.findAll(secondPagewith1Records)
+                .getContent();
+
+        System.out.println(employees);
+    }
+
+    @Test
+    public void findAllSorting(){
+        Pageable sortByAge =
+                PageRequest.of(0, 2, Sort.by("registryAge"));
+        Pageable sortByName =
+                PageRequest.of(0, 2, Sort.by("registryRegistryName").descending());
+
+        Pageable sortByJobDesc =
+                PageRequest.of(0, 2, Sort.by("job").descending());
+
+        List<Employee> employees = employeeRepository.findAll(sortByName)
+                .getContent();
+
+        System.out.println(employees);
     }
 
 
